@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 
 /** 路由分层：公开页 / 布局路由 + 业务子路由 / 403 / 404。守卫见文件末尾。 */
-const children: RouteRecordRaw[] = [  { path: '', name: 'dashboard', component: () => import('../views/DashboardView.vue'), meta: { roles: [] } }]
+const children: RouteRecordRaw[] = [  { path: '', name: 'dashboard', component: () => import('../views/DashboardView.vue'), meta: { roles: [] } }
+  { path: 'audit', name: 'audit', component: () => import('../views/AuditView.vue'), meta: { roles: ['ADMIN', 'ORGANIZER'] } }]
 
 const routes: RouteRecordRaw[] = [
   { path: '/login', name: 'login', component: () => import('../views/LoginView.vue'), meta: { public: true } },
