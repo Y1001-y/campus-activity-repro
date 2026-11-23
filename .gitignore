@@ -1,0 +1,17 @@
+# 构建产物与依赖
+node_modules/
+dist/
+target/
+uploads/
+.vite/
+.hbuilderx/
+*.log
+# 本机私有配置（真实凭据不提交）
+.env
+.env.local
+deploy/.env
+# 编辑器/系统
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
