@@ -7,8 +7,8 @@
 </template>
 
 <script setup lang="ts">
-import { STATUS_TEXT } from '../../utils/format'
-import type { Activity } from '../../api/types'
+import { STATUS_TEXT } from '../utils/format'
+import type { Activity } from '../api/types'
 const props = defineProps<{ activity: Activity }>()
 const statusText = STATUS_TEXT[props.activity.status] || props.activity.status
 function open() { uni.navigateTo({ url: '/pages/activity/detail?id=' + props.activity.id }) }

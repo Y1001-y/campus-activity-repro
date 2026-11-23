@@ -2,17 +2,17 @@ import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 
 /** 路由分层：公开页 / 布局路由 + 业务子路由 / 403 / 404。守卫见文件末尾。 */
-const children: RouteRecordRaw[] = [  { path: '', name: 'dashboard', component: () => import('../views/DashboardView.vue'), meta: { roles: [] } }
-  { path: 'audit', name: 'audit', component: () => import('../views/AuditView.vue'), meta: { roles: ['ADMIN', 'ORGANIZER'] } }
-  { path: 'activities', name: 'activities', component: () => import('../views/ActivitiesView.vue'), meta: { roles: [] } }
-  { path: 'users', name: 'users', component: () => import('../views/UsersView.vue'), meta: { roles: ['ADMIN'] } }]
+const children: RouteRecordRaw[] = [
+  { path: '', name: 'dashboard', component: () => import('../views/DashboardView.vue'), meta: { roles: [] } },
+  { path: 'audit', name: 'audit', component: () => import('../views/AuditView.vue'), meta: { roles: ['ADMIN', 'ORGANIZER'] } },
+  { path: 'activities', name: 'activities', component: () => import('../views/ActivitiesView.vue'), meta: { roles: [] } },
+  { path: 'users', name: 'users', component: () => import('../views/UsersView.vue'), meta: { roles: ['ADMIN'] } }
+]
 
 const routes: RouteRecordRaw[] = [
   { path: '/login', name: 'login', component: () => import('../views/LoginView.vue'), meta: { public: true } },
   { path: '/403', name: 'forbidden', component: () => import('../views/ForbiddenView.vue'), meta: { public: true } },
-  children.length
-    ? { path: '/', component: () => import('../layouts/AdminLayout.vue'), children }
-    : { path: '/', redirect: '/login' },
+  { path: '/', component: () => import('../layouts/AdminLayout.vue'), children },
   { path: '/:pathMatch(.*)*', name: 'notFound', component: () => import('../views/NotFoundView.vue'), meta: { public: true } }
 ]
 
