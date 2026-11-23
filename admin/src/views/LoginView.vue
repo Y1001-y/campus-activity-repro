@@ -1,7 +1,10 @@
 <template>
   <div class="login">
     <h1>校园活动管理后台</h1>
-    <p class="hint">账号 admin / admin123，密码 organizer / org123，学生 2024001001 / stu123</p>
+    <p class="hint">演示账号（任选一组）：</p>
+    <p class="hint">管理员 admin / admin123</p>
+    <p class="hint">组织者 organizer / org123</p>
+    <p class="hint">学生 2024001001 / stu123</p>
     <input v-model="username" placeholder="账号" />
     <input v-model="password" type="password" placeholder="密码" @keyup.enter="submit" />
     <button class="btn" @click="submit">登录</button>
