@@ -1,0 +1,5 @@
+# 预防 pnpm 12 ERR_PNPM_IGNORED_BUILDS：vite 需要 esbuild 的 postinstall
+allowBuilds:
+  esbuild: true
+  vue-demi: true
+  vue-demi: set this to true or false

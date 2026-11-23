@@ -1,0 +1,5 @@
+:root { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; color: #1f2329; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #f5f6fa; }
+a { color: #3b6cf6; text-decoration: none; }
+button { cursor: pointer; font-family: inherit; }
