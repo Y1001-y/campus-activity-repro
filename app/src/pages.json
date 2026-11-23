@@ -23,6 +23,18 @@
       "style": {
         "navigationBarTitleText": "即将开始"
       }
+    },
+    {
+      "path": "pages/activity/list",
+      "style": {
+        "navigationBarTitleText": "活动列表"
+      }
+    },
+    {
+      "path": "pages/activity/detail",
+      "style": {
+        "navigationBarTitleText": "活动详情"
+      }
     }
   ],
   "globalStyle": {
