@@ -77,6 +77,12 @@
       "style": {
         "navigationBarTitleText": "扫码签到"
       }
+    },
+    {
+      "path": "pages/organizer/index",
+      "style": {
+        "navigationBarTitleText": "组织者工作台"
+      }
     }
   ],
   "globalStyle": {
