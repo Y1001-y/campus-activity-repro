@@ -37,7 +37,8 @@ export interface User {
 export interface LoginResult { token: string; user: User }
 export interface Signup {
   id: number; status: string; created_at: string
-  activity_id?: number; activityId?: number; title?: string
+  activity_id?: number; activityId?: number; user_id?: number
+  title?: string; real_name?: string; student_no?: string
   place?: string; start_time?: string; startTime?: string
   checkin_code?: string; checkinCode?: string
 }
