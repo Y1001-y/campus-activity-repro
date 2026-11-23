@@ -53,6 +53,24 @@
       "style": {
         "navigationBarTitleText": "绑定学号"
       }
+    },
+    {
+      "path": "pages/mine/index",
+      "style": {
+        "navigationBarTitleText": "我的"
+      }
+    },
+    {
+      "path": "pages/mine/signups",
+      "style": {
+        "navigationBarTitleText": "我的报名"
+      }
+    },
+    {
+      "path": "pages/mine/messages",
+      "style": {
+        "navigationBarTitleText": "消息通知"
+      }
     }
   ],
   "globalStyle": {
