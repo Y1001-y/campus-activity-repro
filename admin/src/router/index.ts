@@ -6,7 +6,8 @@ const children: RouteRecordRaw[] = [
   { path: '', name: 'dashboard', component: () => import('../views/DashboardView.vue'), meta: { roles: [] } },
   { path: 'audit', name: 'audit', component: () => import('../views/AuditView.vue'), meta: { roles: ['ADMIN', 'ORGANIZER'] } },
   { path: 'activities', name: 'activities', component: () => import('../views/ActivitiesView.vue'), meta: { roles: [] } },
-  { path: 'users', name: 'users', component: () => import('../views/UsersView.vue'), meta: { roles: ['ADMIN'] } }
+  { path: 'users', name: 'users', component: () => import('../views/UsersView.vue'), meta: { roles: ['ADMIN'] } },
+  { path: 'logs', name: 'logs', component: () => import('../views/LogsView.vue'), meta: { roles: ['ADMIN'] } }
 ]
 
 const routes: RouteRecordRaw[] = [

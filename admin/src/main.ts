@@ -1,7 +1,12 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import router from './router'
+import { registerPermission } from './directives/permission'
 import App from './App.vue'
 import './styles/main.css'
 
-createApp(App).use(createPinia()).use(router).mount('#app')
+const app = createApp(App)
+app.use(createPinia())
+app.use(router)
+registerPermission(app)
+app.mount('#app')

@@ -7,7 +7,7 @@
       <p>名额：{{ activity.signed_up }} / {{ activity.capacity }}</p>
       <p>签到码：{{ activity.checkin_code }}</p>
       <p>{{ activity.description }}</p>
-      <button class="btn" @click="$emit('approve', activity.id)">通过</button>
+      <button v-permission="['ADMIN', 'ORGANIZER']" class="btn" @click="$emit('approve', activity.id)">通过</button>
       <button class="btn gray" @click="$emit('reject', activity.id)">驳回</button>
       <button class="btn gray" @click="$emit('close')">关闭</button>
     </div>
