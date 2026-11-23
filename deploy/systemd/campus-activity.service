@@ -1,0 +1,21 @@
+[Unit]
+Description=Campus Activity Spring Boot API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/campus-activity
+# 真实产物：server/target/campus-activity-0.0.1-SNAPSHOT.jar（本地已构建）
+ExecStart=/usr/bin/java -jar /opt/campus-activity/server/target/campus-activity-0.0.1-SNAPSHOT.jar
+Restart=on-failure
+RestartSec=5
+Environment=SERVER_PORT=8016
+Environment=CAMPUS_UPLOAD_DIR=/opt/campus-activity/uploads
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

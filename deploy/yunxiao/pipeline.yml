@@ -1,0 +1,27 @@
+# S02 云效流水线资产（阿里云云效 Flow 风格，参考用；本机无云资源，未实际执行）
+# 阶段：构建后端 jar → 构建双端静态 → 部署到 ECS → 冒烟校验
+stages:
+  - name: build
+    jobs:
+      - name: server-jar
+        commands:
+          - mvn -f server/pom.xml -DskipTests package
+      - name: admin-static
+        commands:
+          - cd admin && pnpm install --frozen-lockfile && pnpm build
+      - name: app-h5-static
+        commands:
+          - cd app && pnpm install --frozen-lockfile && pnpm build:h5
+  - name: deploy
+    jobs:
+      - name: scp-to-ecs
+        commands:
+          - scp server/target/campus-activity-0.0.1-SNAPSHOT.jar $ECS_USER@$ECS_HOST:/opt/campus-activity/server/target/
+          - scp -r admin/dist $ECS_USER@$ECS_HOST:/var/www/campus-activity/admin/
+          - scp -r app/dist/build/h5 $ECS_USER@$ECS_HOST:/var/www/campus-activity/app/dist/build/
+          - ssh $ECS_USER@$ECS_HOST 'systemctl restart campus-activity && nginx -s reload'
+  - name: verify
+    jobs:
+      - name: smoke
+        commands:
+          - bash scripts/smoke.sh   # 通过项数应为 18，失败项 0
