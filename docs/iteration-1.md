@@ -2,7 +2,7 @@
 
 ## 【1】仓库信息
 
-- 仓库地址：本地独立仓库 `C:/Users/17442/WorkBuddy/2026-11-23-09-56-10/campus-activity-repro`（无远程，gh 不可用，理由见文末）。
+- 仓库地址：GitHub 远程 `https://github.com/Y1001-y/campus-activity-repro`；本地工作副本 `C:/Users/17442/WorkBuddy/2026-11-23-09-56-10/campus-activity-repro`。远程由 GitHub REST API（凭据管理器 token）创建，`main` 与 `feat/u1-repro` 均已推送。
 - 分支：`feat/u1-repro`（从 `main` 的 S00 基线切出）。
 - 本轮覆盖提交 7 个（顺序即实现顺序，`git log --oneline` 可核对，SHA 取前 7 位）：
 

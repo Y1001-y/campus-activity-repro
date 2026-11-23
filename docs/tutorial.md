@@ -93,4 +93,13 @@ cd app && cp pnpm-workspace.yaml /tmp/w.bak && printf 'packages:\n  - .\n' > pnp
 
 ## 附：本仓库提交约定
 
-Conventional Commits（feat/fix/docs/chore...），每个覆盖提交一次独立提交，文档单独 `docs(uN)` 提交。当前 29 次提交，全部规范（`git log --oneline` 可核对）。远程推送：本机 `gh` 不可用，如需 GitHub 远程，见文末说明在自己电脑执行两条命令。
+Conventional Commits（feat/fix/docs/chore...），每个覆盖提交一次独立提交，文档单独 `docs(uN)` 提交。提交全部规范（`git log --oneline` 可核对）。
+
+远程仓库已创建并推送：`https://github.com/Y1001-y/campus-activity-repro`。本地已 `git remote add origin` 且两个分支均设好 upstream，后续更新直接：
+
+```bash
+git push            # 推送当前分支（feat/u1-repro）
+git push origin main
+```
+
+> 说明：本机未安装 `gh` CLI，仓库通过 GitHub REST API（读取 Git 凭据管理器中已有的 token，不回显明文）创建；两个分支 `git push -u origin <branch>` 推送成功，API 已核验远程最新提交。

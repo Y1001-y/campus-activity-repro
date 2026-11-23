@@ -85,5 +85,6 @@ python scripts/icon-gen.py scripts/output/app-icon.png  # 真实生成 664 字�
 
 ## 分支与提交
 
+- 远程：`https://github.com/Y1001-y/campus-activity-repro`（`origin` 已配置，两分支均已推送并设 upstream）。
 - `main`：S00 基线；`feat/u1-repro`：四轮全部覆盖提交。
 - Conventional Commits；每个覆盖提交一次独立提交，阶段文档单独以 `docs(uN)` 提交。
