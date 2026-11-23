@@ -11,7 +11,18 @@ check() { # check <名称> <实际值> <期望值>
   else log "  FAIL  $1 (期望 $3, 实际 $2)"; FAIL=$((FAIL+1)); fi
 }
 api() { curl -s -m 8 "$@"; }
-field() { python3 -c "import sys,json; d=json.load(sys.stdin); print($1)" 2>/dev/null; }
+
+# 探测真正可用的 python：跳过 WindowsApps 的 python3 占位符（它会静默失败导致解析为空）
+PY=""
+for c in python3 python; do
+  if command -v "$c" >/dev/null 2>&1; then
+    p=$(command -v "$c")
+    case "$p" in *WindowsApps*) continue;; esac
+    if "$c" -c "import json,sys; json.load(sys.stdin)" <<<'{"code":0}' >/dev/null 2>&1; then PY="$c"; break; fi
+  fi
+done
+if [ -z "$PY" ]; then log "FATAL: 未找到可用的 python（用于解析 JSON）"; exit 2; fi
+field() { "$PY" -c "import sys,json; d=json.load(sys.stdin); print($1)" 2>/dev/null; }
 code() { field "d.get('code')"; }
 
 log "=== S01 端到端冒烟 BASE=$BASE ==="

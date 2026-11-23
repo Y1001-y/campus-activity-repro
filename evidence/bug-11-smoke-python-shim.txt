@@ -1,0 +1,33 @@
+===== BUG-11 复现（真实输出）=====
+在 Windows 上用 D:\soft\Git\bin\bash.exe 运行冒烟脚本：
+$ D:\soft\Git\bin\bash.exe scripts/smoke.sh
+[1] 健康检查 /api/ping
+  FAIL  ping.code (期望 0, 实际 )
+...（全部 18 项 FAIL，实际值均为空）
+=== 结果：PASS=0 FAIL=18 ===
+但同一脚本在当前 WorkBuddy bash 下跑是 PASS=18 FAIL=0，单独 curl 也正常。
+
+===== 可复现指令 =====
+D:/soft/Git/bin/bash.exe scripts/smoke.sh   # 该环境全 FAIL
+
+===== 排查（真实命令）=====
+$ D:\soft\Git\bin\bash.exe -c 'which python3'
+/c/Users/17442/AppData/Local/Microsoft/WindowsApps/python3   # WindowsApps 占位符
+$ 当前 bash: command -v python3
+/c/Users/17442/.workbuddy/binaries/python/versions/3.13.12/python3  # 真 python
+curl 在两个 bash 里都正常（/mingw64/bin/curl），排除网络问题。
+
+===== 原因 =====
+脚本 field() 用 python3 解析 JSON。D 盘 Git bash 的 PATH 里 python3 命中
+WindowsApps 的占位程序（点击跳 Microsoft Store 的 shim），
+调用它返回空且退出码非 0，被 2>/dev/null 吞掉 → field() 返回空字符串 →
+所有 check 的"实际值"为空 → 18 项全 FAIL。脚本逻辑与后端均无问题。
+
+===== 解决 =====
+脚本启动时探测真正可用的 python：遍历 python3/python，跳过路径含 WindowsApps 的
+占位符，并用 <<<'{"code":0}' 实际解析测试通过才选用；都不行则 FATAL 退出。
+重跑两个 bash 环境均 PASS=18 FAIL=0。
+
+===== 预防 =====
+Windows 跨平台脚本不要假定 python3 是真解释器；先用解析探针验证再使用，
+并显式排除 WindowsApps shim。

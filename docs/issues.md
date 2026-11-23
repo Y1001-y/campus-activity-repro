@@ -104,3 +104,15 @@
 - **预防**：CJS/ESM 双形态依赖在 vite.config 里做 typeof 归一化；构建脚本纳入提交前验证。
 - **复现**：把 vite.config.ts 改回 `import uni from ...; plugins:[uni()]` 后 `pnpm build:h5`。
 - **证据**：`evidence/bug-10-uni-esm-interop.txt`。
+
+---
+
+## BUG-11 冒烟脚本在部分 bash 下全 FAIL（python3 占位符）
+
+- **现象**：用 `D:/soft/Git/bin/bash.exe scripts/smoke.sh` 跑，18 项全部 FAIL 且实际值为空；同一脚本在另一 bash 下 PASS=18。
+- **排查**：`which python3` 在该 bash 指向 `C:/Users/17442/AppData/Local/Microsoft/WindowsApps/python3`（WindowsApps 占位符），curl 正常。
+- **原因**：`field()` 用 python3 解析 JSON，占位符调用返回空被 `2>/dev/null` 吞掉，所有实际值为空。
+- **解决**：脚本启动时遍历 python3/python，跳过 WindowsApps 路径，用 `<<<'{"code":0}'` 解析探针确认可用再选用；两个 bash 环境均 PASS=18。
+- **预防**：Windows 跨平台脚本不假定 python3 是真解释器，先探针验证再使用。
+- **复现**：`D:/soft/Git/bin/bash.exe scripts/smoke.sh`（修复前全 FAIL）。
+- **证据**：`evidence/bug-11-smoke-python-shim.txt`。
