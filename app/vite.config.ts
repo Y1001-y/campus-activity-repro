@@ -1,5 +1,8 @@
 import { defineConfig } from 'vite'
-import uni from '@dcloudio/vite-plugin-uni'
+import uniPlugin from '@dcloudio/vite-plugin-uni'
+
+// CJS/ESM 互操作：ESM 加载时 default 是 { default, runDev, ... }，真正插件在 default.default
+const uni = (typeof uniPlugin === 'function' ? uniPlugin : (uniPlugin as unknown as { default: typeof uniPlugin }).default)
 
 export default defineConfig({
   plugins: [uni()],

@@ -1,0 +1,37 @@
+===== BUG-10 复现（真实输出，A10 之后执行 pnpm build:h5）=====
+$ cd app && pnpm build:h5
+$ uni build
+Compiler version: 5.26（vue3）
+Compiling...
+failed to load config from .../app/vite.config.ts
+uni is not a function
+Build failed with errors.
+[ELIFECYCLE] Command failed with exit code 1.
+退出码 = 1
+
+===== 可复现指令 =====
+cd app && pnpm build:h5   # 首次必现
+
+===== 排查（真实命令）=====
+$ node -e "const m=require('@dcloudio/vite-plugin-uni'); console.log(typeof m.default)"
+function                      # CJS 视角：default 是函数
+$ node --input-type=module -e "import uni from '@dcloudio/vite-plugin-uni'; console.log(typeof uni)"
+object                        # ESM 视角：default 是对象
+$ node --input-type=module -e "import * as ns from '@dcloudio/vite-plugin-uni'; console.log(Object.keys(ns.default))"
+['runDev','runBuild','shouldMoveSourceMapFromCache','default']   # 真正函数是 default.default
+
+===== 原因 =====
+@dcloudio/vite-plugin-uni 是 CJS 包，被 Vite 以 ESM 方式加载配置时发生互操作：
+import uni from '...' 拿到的是 { default, runDev, ... } 对象而非函数，
+直接 uni() 调用报 "uni is not a function"。dev 模式此前未暴露是因为走了不同的加载路径。
+
+===== 解决 =====
+vite.config.ts 里兼容两种形态：
+import uniPlugin from '@dcloudio/vite-plugin-uni'
+const uni = (typeof uniPlugin === 'function' ? uniPlugin : (uniPlugin as any).default) as typeof uniPlugin
+plugins: [uni()]
+重跑 pnpm build:h5 成功产出 dist/build/h5，退出码 0。
+
+===== 预防 =====
+CJS/ESM 双形态依赖在 vite.config 里做 typeof 归一化；
+构建脚本（build:h5）也要纳入提交前验证，不能只跑 type-check。
