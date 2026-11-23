@@ -41,6 +41,18 @@
       "style": {
         "navigationBarTitleText": "活动报名"
       }
+    },
+    {
+      "path": "pages/auth/login",
+      "style": {
+        "navigationBarTitleText": "登录"
+      }
+    },
+    {
+      "path": "pages/auth/bind",
+      "style": {
+        "navigationBarTitleText": "绑定学号"
+      }
     }
   ],
   "globalStyle": {
