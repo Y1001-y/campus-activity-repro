@@ -1,0 +1,25 @@
+{
+  "name": "校园活动",
+  "appid": "",
+  "description": "校园活动管理平台学生端",
+  "versionName": "1.0.0",
+  "versionCode": "100",
+  "transformPx": false,
+  "vueVersion": "3",
+  "h5": {
+    "devServer": {
+      "port": 5174
+    },
+    "router": {
+      "mode": "hash",
+      "base": "./"
+    }
+  },
+  "mp-weixin": {
+    "appid": "",
+    "setting": {
+      "urlCheck": false,
+      "es6": true
+    }
+  }
+}
