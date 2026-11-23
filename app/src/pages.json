@@ -83,6 +83,12 @@
       "style": {
         "navigationBarTitleText": "组织者工作台"
       }
+    },
+    {
+      "path": "pages/activity/publish",
+      "style": {
+        "navigationBarTitleText": "发布活动"
+      }
     }
   ],
   "globalStyle": {

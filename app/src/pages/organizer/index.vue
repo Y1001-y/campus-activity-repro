@@ -7,6 +7,8 @@
       <text class="meta">{{ c.label }}</text><text class="h1">{{ c.value }}</text>
     </view>
     <view class="btn" @tap="go('/pages/activity/list')"><text>浏览活动</text></view>
+    <view class="btn" @tap="go('/pages/activity/publish')"><text>发布活动（含封面上传）</text></view>
+    <view class="btn" @tap="go('/pages/activity/signup-list')"><text>报名名单与签到核销</text></view>
   </view>
 </template>
 

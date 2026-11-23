@@ -2,7 +2,7 @@
  * A02 统一请求层：baseURL 由 vite proxy 决定，不硬编码接口域名；
  * code=0 才 resolve，其余统一按业务码拦截；token 只保存服务端下发值。
  */
-import type { ApiResponse } from './types'
+import type { ApiResponse, UploadResult } from './types'
 
 // 非 H5 端直连后端；H5 端由条件编译覆盖为同源 /api（走 vite proxy）。
 // 只声明一次变量，避免 vue-tsc 在条件编译注释下看到两个 const 而报 TS2451。
@@ -21,6 +21,38 @@ export function setToken(token: string): void {
   else clearToken()
 }
 export function clearToken(): void { uni.removeStorageSync(TOKEN_KEY) }
+
+/** 静态资源绝对地址：/uploads/xxx 在非 H5 端需拼后端域名，H5 端同源走 proxy。 */
+export function assetUrl(path: string | null | undefined): string {
+  if (!path) return ''
+  if (/^https?:\/\//.test(path)) return path
+  const origin = /^\/api/.test(BASE_URL) ? '' : BASE_URL.replace(/\/api$/, '')
+  return origin + path
+}
+
+/**
+ * A10 上传：uni.uploadFile 走同一后端 /api/upload，统一拆包 code。
+ * 格式/大小在页面选择文件时先校验，后端再次校验（双端一致）。
+ */
+export function upload(filePath: string, name = 'file'): Promise<UploadResult> {
+  const token = getToken()
+  return new Promise<UploadResult>((resolve, reject) => {
+    uni.uploadFile({
+      url: BASE_URL + '/upload',
+      filePath,
+      name,
+      header: token ? { Authorization: `Bearer ${token}` } : {},
+      success: (res) => {
+        let body: ApiResponse<UploadResult>
+        try { body = JSON.parse(res.data as string) } catch { reject(new BizError(50000, '响应格式异常')); return }
+        if (!body || typeof body.code !== 'number') { reject(new BizError(50000, '响应格式异常')); return }
+        if (body.code !== 0) { reject(new BizError(body.code, body.message)); return }
+        resolve(body.data)
+      },
+      fail: (err) => reject(err)
+    })
+  })
+}
 
 export class BizError extends Error {
   constructor(public code: number, message: string) { super(message) }
