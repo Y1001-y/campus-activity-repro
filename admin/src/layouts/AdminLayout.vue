@@ -25,7 +25,8 @@ const all = [
   { path: '/activities', label: '活动管理', roles: [] as string[] },
   { path: '/audit', label: '活动审核', roles: ['ADMIN', 'ORGANIZER'] },
   { path: '/users', label: '用户管理', roles: ['ADMIN'] },
-  { path: '/logs', label: '操作日志', roles: ['ADMIN'] }
+  { path: '/logs', label: '操作日志', roles: ['ADMIN'] },
+  { path: '/materials', label: '素材上传', roles: ['ADMIN', 'ORGANIZER'] }
 ]
 const menus = computed(() => all.filter((m) => !m.roles.length || m.roles.includes(store.role)))
 async function logout() {

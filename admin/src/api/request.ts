@@ -14,6 +14,22 @@ export class BizError extends Error {
   constructor(public code: number, message: string) { super(message) }
 }
 
+/** D09 素材上传：FormData 直传 /api/upload，绕过 JSON 序列化但复用同一拆包出口。 */
+export async function upload(file: File): Promise<{ url: string; name: string; size: number }> {
+  const fd = new FormData()
+  fd.append('file', file)
+  const res = await httpInstance.post<ApiResponse<{ url: string; name: string; size: number }>>('/upload', fd)
+  const body = res.data
+  if (body.code !== 0) {
+    if (body.code === 10001) {
+      localStorage.removeItem('campus_token'); localStorage.removeItem('campus_user')
+      if (location.pathname !== '/login') location.href = '/login'
+    }
+    throw new BizError(body.code, body.message)
+  }
+  return body.data
+}
+
 httpInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem('campus_token')
   if (token) config.headers.Authorization = `Bearer ${token}`
