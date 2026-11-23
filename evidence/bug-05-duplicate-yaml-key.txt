@@ -1,0 +1,26 @@
+===== BUG-05 复现（真实输出）=====
+$ cat admin/pnpm-workspace.yaml   # pnpm 失败后自动追加了占位行
+allowBuilds:
+  esbuild: true
+  vue-demi: true
+  vue-demi: set this to true or false
+$ cd admin && pnpm install
+       --> <input>:5:3
+        |
+      3 |   esbuild: true
+      4 |   vue-demi: true
+      5 |   vue-demi: set this to true or false
+        |   ^ duplicate mapping key: vue-demi, set DuplicateKeyPolicy in
+      Options if acceptable
+
+退出码 = 1
+
+===== 原因 =====
+pnpm 12 在 ERR_PNPM_IGNORED_BUILDS 时会自动往 pnpm-workspace.yaml 追加
+  <pkg>: set this to true or false 占位；手工补同名键后形成 YAML 重复键，解析失败。
+
+===== 解决 =====
+整体重写该文件为干净的 allowBuilds 映射（每个包只出现一次），再 pnpm install。
+
+===== 预防 =====
+修配置前先 cat 一次，确认 pnpm 没有自动追加内容；修完 cat 复核再重装。

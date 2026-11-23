@@ -1,0 +1,26 @@
+===== BUG-02 复现（真实输出）=====
+$ pnpm install --no-frozen-lockfile  # 在 app/ 下
+      23-09-56-10\campus-activity-repro\app\pnpm-workspace.yaml: error: line 2
+      column 15: mapping values are not allowed in this context
+       --> <input>:2:15
+        |
+      1 | allowBuilds:/n  core-js: true
+      2 |   core-js-pure: true
+        |               ^ mapping values are not allowed in this context
+      3 |   esbuild: true
+        |
+
+退出码 = 1
+
+===== 触发方式（可复现指令）=====
+用脚本一次性写 YAML 时把换行误写成字面 /n：
+python -c "open('pnpm-workspace.yaml','w').write('allowBuilds:/n  esbuild: true')"
+cat pnpm-workspace.yaml    # 第一行变成 allowBuilds:/n  ...
+pnpm install               # 复现 YAML 解析错误
+
+===== 原因 =====
+pnpm-workspace.yaml 是 YAML，必须用真实换行；字面 /n 使第二行被当成同一行的值，
+YAML 解析器报 mapping values are not allowed in this context。
+
+===== 解决 =====
+改用逐行写入（Python chr(10).join 或 printf 多参数），再用 cat 校验后重装。

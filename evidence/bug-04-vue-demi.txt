@@ -1,0 +1,20 @@
+===== BUG-04 复现（真实输出）=====
+$ cd admin && pnpm install --no-frozen-lockfile
+
+  × installing dependencies
+  ╰─▶ Ignored build scripts: vue-demi@0.14.10
+  help: Run "pnpm approve-builds" to pick which dependencies should be allowed
+        to run scripts.
+
+退出码 = 1
+
+===== 原因 =====
+与 BUG-01 同源：pnpm 12 默认拦截 install 脚本。
+预防时只放行了 esbuild，漏了 Pinia 传递依赖 vue-demi 的 postinstall。
+
+===== 解决 =====
+在 admin/pnpm-workspace.yaml 的 allowBuilds 下补 vue-demi: true 后重装。
+
+===== 预防 =====
+不要凭经验罗列；以 pnpm install 报错里的 Ignored build scripts 列表为准逐项放行，
+改完必须重跑 pnpm install 确认退出码为 0。

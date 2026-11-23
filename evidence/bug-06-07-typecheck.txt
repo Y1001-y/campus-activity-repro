@@ -1,0 +1,23 @@
+===== BUG-06 复现（真实输出）=====
+$ cd app && pnpm type-check
+$ vue-tsc --noEmit
+src/components/ActivityCard.vue(10,29): error TS2307: Cannot find module '../../utils/format' or its corresponding type declarations.
+src/components/ActivityCard.vue(11,31): error TS2307: Cannot find module '../../api/types' or its corresponding type declarations.
+[ELIFECYCLE] Command failed with exit code 2.
+退出码 = 2
+原因：ActivityCard.vue 位于 src/components/，导入 src/api/types 只需 ../ 而非 ../../。
+解决：改为 '../utils/format' 与 '../api/types'。
+
+===== BUG-07 复现（真实输出）=====
+$ cd admin && pnpm type-check
+$ vue-tsc --noEmit
+src/router/index.ts(6,3): error TS1005: ',' expected.
+src/router/index.ts(7,3): error TS1005: ',' expected.
+src/router/index.ts(8,3): error TS1005: ',' expected.
+[ELIFECYCLE] Command failed with exit code 2.
+退出码 = 2
+原因：children 数组由多行字符串拼接，元素之间漏逗号；只有 1 个元素时不会暴露，加到 4 个才报 TS1005。
+解决：每个 RouteRecordRaw 元素末尾补逗号，重跑 type-check。
+
+===== 预防 =====
+每次新增页面后立刻 pnpm type-check，不要攒到一轮结束再查。

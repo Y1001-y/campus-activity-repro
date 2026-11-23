@@ -1,0 +1,17 @@
+===== BUG-03 复现（真实输出）=====
+$ cd app && pnpm type-check
+$ vue-tsc --noEmit
+src/api/request.ts(8,7): error TS2451: Cannot redeclare block-scoped variable 'BASE_URL'.
+src/api/request.ts(11,7): error TS2451: Cannot redeclare block-scoped variable 'BASE_URL'.
+[ELIFECYCLE] Command failed with exit code 2.
+退出码 = 2
+
+===== 原因 =====
+uni-app 的 // #ifdef H5 / // #ifndef H5 是构建期条件编译标记，对 TypeScript 只是普通注释；
+两个分支各写一个 const BASE_URL，vue-tsc 会认为重复声明块级变量（TS2451）。
+
+===== 解决 =====
+改成单个 let 声明 + 条件编译内赋值覆盖，保留条件编译语义且类型检查可通过。
+
+===== 预防 =====
+type-check 必须纳入每次提交前的检查，不能只靠 dev/build（构建期插件会吃掉注释，掩盖该错误）。

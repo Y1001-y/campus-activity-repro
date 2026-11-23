@@ -1,0 +1,30 @@
+===== BUG-01 复现（真实输出）=====
+$ cd app && pnpm install --no-frozen-lockfile
++ typescript 5.9.3
++ vite 5.2.8
++ vue-tsc 2.2.12
+
+Error: ERR_PNPM_IGNORED_BUILDS
+
+  × installing dependencies
+  ╰─▶ Ignored build scripts: core-js-pure@3.51.0, core-js@3.51.0,
+      esbuild@0.20.2
+  help: Run "pnpm approve-builds" to pick which dependencies should be allowed
+        to run scripts.
+
+退出码 = 1
+
+===== 排查 =====
+$ cat pnpm-workspace.yaml   # pnpm 12 自动生成的占位
+allowBuilds:
+  core-js: set this to true or false
+  core-js-pure: set this to true or false
+  esbuild: set this to true or false
+
+===== 原因 =====
+pnpm 12 默认禁止依赖执行 install/postinstall 脚本（供应链安全策略），
+uni-app 依赖链里的 core-js / core-js-pure / esbuild 需要构建脚本，因此安装直接失败。
+与 Node 版本、网络、包版本均无关。
+
+===== 解决 =====
+在 app/pnpm-workspace.yaml 中显式放行这三个包，然后重新 pnpm install。

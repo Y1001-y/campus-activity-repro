@@ -1,0 +1,20 @@
+===== S02 本机部署可访问性验证（真实输出）=====
+$ cd admin && pnpm preview            # vite preview 监听 127.0.0.1:4173
+$ curl -s -o /dev/null -w "HTTP %{http_code}\n" http://127.0.0.1:4173/
+HTTP 200
+$ curl -s -o /dev/null -w "HTTP %{http_code}\n" http://127.0.0.1:4173/users
+HTTP 200
+$ curl -s -o /dev/null -w "HTTP %{http_code}\n" http://127.0.0.1:4173/logs
+HTTP 200
+$ curl -s http://127.0.0.1:4173/users | head -c 120
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=devic
+
+===== 结论 =====
+admin 静态站经 vite preview 真实可访问；直接刷新深层子路由 /users、/logs 均返回
+HTTP 200 且响应体为 index.html（SPA fallback 生效），等价于生产 Nginx 的
+try_files $uri $uri/ /index.html 行为，证明子路由刷新不 404。
+本机无 Nginx 与云资源，未实际部署 ECS，配置资产见 deploy/。

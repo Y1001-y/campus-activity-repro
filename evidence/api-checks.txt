@@ -1,0 +1,11 @@
+=== 等待 8016 就绪 ===
+{"code":0,"message":"ok","data":{"service":"campus-activity","status":"up"}}=== 启动日志关键行 ===
+2026-11-23T14:27:38.515+08:00  INFO 28520 --- [campus-activity] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8016 (http)
+2026-11-23T14:27:39.276+08:00  INFO 28520 --- [campus-activity] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8016 (http) with context path '/'
+2026-11-23T14:27:39.299+08:00  INFO 28520 --- [campus-activity] [           main] c.c.activity.CampusActivityApplication   : Started CampusActivityApplication in 2.093 seconds (process running for 2.5)
+=== C2 登录拿 token（admin）===
+{"code":0,"message":"ok","data":{"token":"7a4497fc26804762a8a13831098babc9","user":{"id":1,"username":"admin","realName":"系统管理员","role":"ADMIN","studentNo":null,"phone":"13800000001"}}}
+=== 携带 token 访问 /api/auth/me ===
+{"code":0,"message":"ok","data":{"id":1,"username":"admin","realName":"系统管理员","role":"ADMIN","studentNo":null,"phone":"13800000001"}}=== 公开活动列表 ===
+{"code":0,"message":"ok","data":{"list":[{"id":101,"title":"前端工程化实践工作坊","category_id":4,"cover":null,"place":"实训楼 A302","start_time":"2026-11-28 14:00","end_time":"2026-11-28 17:00","signup_deadline":"2026-11-27 18:00","capacity":30,"signed_up":2,"status":"PUBLISHED","audit_status":"APPROVED","organizer_id":2,"description":"从零搭建 Vite + Vue3 工程，含请求层与类型契约。","checkin_code":"CK-2026-101","category_name":"创新创业"},{"id":102,"title":"校园秋季马拉松","category_id":2,"cover":null,"place":"东区操场","start_time":"2026-12-05 08:00","end_time":"2026-12-05 12:00","signup_deadline":"2026-12-01 20:00","capacity":200,"signed_up":1,"status":"PUBLISHED","audit_status":"APPROVED","organizer_id":2,"description":"5 公里欢乐跑，完赛可领取纪念徽章。","checkin_code":"CK-2026-102","category_name":"文体活动"}],"total":3,"page":1,"size":2}}=== 后台工作台（真实统计）===
+{"code":0,"message":"ok","data":{"operator":"admin","activityCount":4,"publishedCount":3,"pendingAudit":1,"signupCount":5,"checkinCount":0,"userCount":5}}
