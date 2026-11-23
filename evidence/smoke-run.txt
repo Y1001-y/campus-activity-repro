@@ -1,0 +1,33 @@
+=== S01 端到端冒烟 BASE=http://127.0.0.1:8016 ===
+[1] 健康检查 /api/ping
+  PASS  ping.code (=0)
+[2] 活动分类 /api/categories
+  PASS  categories.code (=0)
+  PASS  categories 条数 (=6)
+[3] 公开活动列表 /api/activities
+  PASS  activities.code (=0)
+  PASS  分页 size (=2)
+[4] 管理员登录 /api/auth/login
+  PASS  login.code (=0)
+  PASS  拿到真实 token (长度 32)
+[5] 携带 token 访问 /api/auth/me
+  PASS  me.code (=0)
+  PASS  me.role (=ADMIN)
+[6] 后台工作台 /api/admin/dashboard（真实 SQL 统计）
+  PASS  dashboard.code (=0)
+  PASS  activityCount (=4)
+  PASS  userCount (=5)
+[7] 学生登录并报名 /api/activities/101/signup
+  PASS  重复报名返回业务码 30002 (=30002)
+[8] 签到码错误分支 /api/checkin（错误码 40001）
+  PASS  错误签到码返回 40001 (=40001)
+[9] 未登录访问后台 /api/admin/dashboard（拦截码 10001）
+  PASS  未登录返回 10001 (=10001)
+[10] 低权限令牌访问后台（拦截码 10002）
+  PASS  学生令牌返回 10002 (=10002)
+[11] 名额已满分支 /api/activities/103/signup（码 30001）
+  PASS  容量 2 已满返回 30001 (=30001)
+[12] 素材列表 /api/uploads
+  PASS  uploads.code (=0)
+
+=== 结果：PASS=18 FAIL=0 ===
